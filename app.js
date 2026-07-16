@@ -63,30 +63,38 @@ function ScrambleGame() {
   const [passes, setPasses] = useState(3)
 
   const [message, setMessage] = useState("")
+  const [messageType, setMessageType] = useState("")
+
   const [gameOver, setGameOver] = useState(false)
 
 
 
-  // Load saved game when page opens
   useEffect(() => {
 
     const savedWords = JSON.parse(localStorage.getItem("words"))
+
     const savedPoints = localStorage.getItem("points")
+
     const savedStrikes = localStorage.getItem("strikes")
+
     const savedPasses = localStorage.getItem("passes")
 
 
-    if (savedWords && savedWords.length > 0) {
+
+    if(savedWords && savedWords.length > 0){
 
       setWords(savedWords)
+
       setPoints(Number(savedPoints))
+
       setStrikes(Number(savedStrikes))
+
       setPasses(Number(savedPasses))
 
       chooseWord(savedWords)
 
-    } 
-    else {
+    }
+    else{
 
       startNewGame()
 
@@ -96,7 +104,6 @@ function ScrambleGame() {
 
 
 
-  // Save game whenever values change
   useEffect(() => {
 
     localStorage.setItem(
@@ -119,6 +126,7 @@ function ScrambleGame() {
       passes
     )
 
+
   }, [words, points, strikes, passes])
 
 
@@ -129,19 +137,27 @@ function ScrambleGame() {
 
     const newWords = shuffle(originalWords)
 
+
     setWords(newWords)
 
     setPoints(0)
-    setStrikes(0)
-    setPasses(3)
 
-    chooseWord(newWords)
+    setStrikes(0)
+
+    setPasses(3)
 
     setGameOver(false)
 
     setMessage("")
 
+    setMessageType("")
+
+
+    chooseWord(newWords)
+
   }
+
+
 
 
 
@@ -150,6 +166,7 @@ function ScrambleGame() {
     if(wordList.length === 0){
 
       setGameOver(true)
+
       return
 
     }
@@ -160,6 +177,7 @@ function ScrambleGame() {
 
     setCurrentWord(selected)
 
+
     setScrambledWord(
       shuffle(selected)
     )
@@ -169,15 +187,21 @@ function ScrambleGame() {
 
 
 
+
+
   function nextWord(){
 
-    const remaining = words.slice(1)
+    const remainingWords = words.slice(1)
 
-    setWords(remaining)
 
-    chooseWord(remaining)
+    setWords(remainingWords)
+
+
+    chooseWord(remainingWords)
 
   }
+
+
 
 
 
@@ -188,39 +212,58 @@ function ScrambleGame() {
     event.preventDefault()
 
 
+
     if(gameOver){
+
       return
+
     }
+
 
 
     if(
-      guess.toLowerCase() === 
-      currentWord.toLowerCase()
+      guess.toLowerCase() === currentWord.toLowerCase()
     ){
+
 
       setPoints(points + 1)
 
-      setMessage("Correct! Great job.")
+
+      setMessage("✅ Correct! Great job.")
+
+
+      setMessageType("correct")
+
 
       nextWord()
 
+
     }
+
     else{
 
-      const newStrikes = strikes + 1
 
-      setStrikes(newStrikes)
-
-      setMessage("Incorrect. Try again.")
+      const updatedStrikes = strikes + 1
 
 
-      if(newStrikes >= 3){
+      setStrikes(updatedStrikes)
+
+
+      setMessage("❌ Incorrect. Try again.")
+
+
+      setMessageType("incorrect")
+
+
+
+      if(updatedStrikes >= 3){
 
         setGameOver(true)
 
       }
 
     }
+
 
 
     setGuess("")
@@ -231,31 +274,45 @@ function ScrambleGame() {
 
 
 
-function passWord(){
 
-  if(passes > 0 && !gameOver){
 
-    setPasses(passes - 1)
+  function passWord(){
 
-    setMessage("Word skipped.")
 
-    nextWord()
+    if(passes > 0 && !gameOver){
+
+
+      setPasses(passes - 1)
+
+
+      setMessage("⏭️ Word skipped.")
+
+
+      setMessageType("skip")
+
+
+      nextWord()
+
+    }
 
   }
 
-}
 
 
 
 
 
-function resetGame(){
+  function resetGame(){
 
-  localStorage.clear()
 
-  startNewGame()
+    localStorage.clear()
 
-}
+
+    startNewGame()
+
+
+  }
+
 
 
 
@@ -270,23 +327,36 @@ return (
 <h1>Scramble</h1>
 
 
+
 {
+
 gameOver ?
 
 
 <div>
 
-<h2>Game Over</h2>
 
-<p>
+<h2>
+Game Over
+</h2>
+
+
+<p className="score">
+
 Final Score: {points}
+
 </p>
 
+
 <button onClick={resetGame}>
+
 Play Again
+
 </button>
 
+
 </div>
+
 
 
 :
@@ -295,9 +365,11 @@ Play Again
 <div>
 
 
+
 <h2>
 Unscramble this word:
 </h2>
+
 
 
 <div className="word">
@@ -305,6 +377,7 @@ Unscramble this word:
 {scrambledWord}
 
 </div>
+
 
 
 
@@ -326,8 +399,10 @@ placeholder="Enter your guess"
 />
 
 
-<button>
+<button className="submit-btn">
+
 Submit
+
 </button>
 
 
@@ -335,26 +410,33 @@ Submit
 
 
 
-<p>
+
+
+<p className={`message ${messageType}`}>
+
 {message}
+
 </p>
+
+
 
 
 
 <div className="stats">
 
+
 <p>
-Points: {points}
+⭐ Points: {points}
 </p>
 
 
 <p>
-Strikes: {strikes}/3
+❌ Strikes: {strikes}/3
 </p>
 
 
 <p>
-Passes: {passes}
+⏩ Passes: {passes}
 </p>
 
 
@@ -362,7 +444,11 @@ Passes: {passes}
 
 
 
+
+
 <button
+
+className="pass-btn"
 
 onClick={passWord}
 
@@ -375,10 +461,11 @@ Pass
 </button>
 
 
+
 </div>
 
-
 }
+
 
 
 </div>
@@ -386,6 +473,8 @@ Pass
 )
 
 }
+
+
 
 
 
