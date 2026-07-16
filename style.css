@@ -89,13 +89,21 @@ h2 {
 
 
 
-form {
+/* Fixed input and button alignment */
+
+.guess-form {
 
     display: flex;
 
     justify-content: center;
 
+    align-items: center;
+
     gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin: 0 auto 20px;
 
 }
 
@@ -103,9 +111,11 @@ form {
 
 input {
 
-    padding: 12px;
-
     width: 220px;
+
+    height: 48px;
+
+    padding: 0 14px;
 
     border: 2px solid #cbd5e1;
 
@@ -131,7 +141,11 @@ input:focus {
 
 button {
 
-    padding: 12px 22px;
+    height: 48px;
+
+    min-width: 100px;
+
+    padding: 0 18px;
 
     border: none;
 
@@ -148,6 +162,12 @@ button {
     cursor: pointer;
 
     transition: 0.3s ease;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
 }
 
@@ -178,6 +198,17 @@ button:disabled {
     cursor: not-allowed;
 
     transform: none;
+
+}
+
+
+
+.guess-form .submit-btn,
+.guess-form .pass-btn {
+
+    width: 100px;
+
+    margin-top: 0;
 
 }
 
@@ -249,13 +280,15 @@ button:disabled {
 
 
 
-.game button:last-child {
+.game > div > button:last-child {
 
-    margin-top: 20px;
+    margin: 20px auto 0;
 
 }
 
 
+
+/* Mobile */
 
 @media (max-width: 450px) {
 
@@ -282,10 +315,19 @@ button:disabled {
 
         flex-direction: column;
 
+        align-items: stretch;
+
     }
 
 
     input {
+
+        width: 100%;
+
+    }
+
+
+    form button {
 
         width: 100%;
 

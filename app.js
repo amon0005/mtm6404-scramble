@@ -381,7 +381,7 @@ Unscramble this word:
 
 
 
-<form onSubmit={checkGuess}>
+<form className="guess-form" onSubmit={checkGuess}>
 
 
 <input
@@ -402,6 +402,22 @@ placeholder="Enter your guess"
 <button className="submit-btn">
 
 Submit
+
+</button>
+
+
+<button
+
+type="button"
+
+className="pass-btn"
+
+onClick={passWord}
+
+disabled={passes === 0}
+>
+
+Pass
 
 </button>
 
@@ -444,21 +460,6 @@ Submit
 
 
 
-
-
-<button
-
-className="pass-btn"
-
-onClick={passWord}
-
-disabled={passes === 0}
-
->
-
-Pass
-
-</button>
 
 
 
